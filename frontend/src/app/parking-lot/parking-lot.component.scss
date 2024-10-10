@@ -1,0 +1,24 @@
+.wrapper {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-auto-flow: column;
+}
+
+.lot {
+  border: 1px solid black;
+  height: 70px;
+
+  &:nth-child(5n) {
+    border-bottom-width: 1px;
+  }
+}
+
+.lot_option_1 {
+  border-width: 1px 0 0 1px;
+  margin-right: 200px;
+  text-align: end;
+}
+
+.lot_option_2 {
+  border-width: 1px 1px 0 0;
+}
