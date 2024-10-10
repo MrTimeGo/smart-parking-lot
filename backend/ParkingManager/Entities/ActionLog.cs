@@ -8,4 +8,5 @@ public class ActionLog
     public string Image { get; set; } = string.Empty;
     public DateTime At { get; set; }
     public int Place { get; set; }
+    public decimal? Cost { get; set; }
 }

@@ -1,22 +1,24 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ParkingManager.Dtos;
+using ParkingManager.Services.Interfaces;
 
 namespace ParkingManager.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class ParkingLotController : ControllerBase
+public class ParkingLotController(IParkingManager parkingManager) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetParkingLotStatus()
+    public async Task<ActionResult<List<ParkingDto>>> GetParkingLotStatus()
     {
-        return Ok();
+        return Ok(await parkingManager.GetParkingStatus());
     }
 
     [HttpGet("action-logs")]
-    public async Task<IActionResult> GetParkingLotActionLogs()
+    public async Task<ActionResult<List<ActionLogDto>>> GetParkingLotActionLogs()
     {
-        return Ok();
+        return Ok(await parkingManager.GetLastActionLogs());
     }
 }
 

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ParkingManager.Configurations;
 using ParkingManager.Data;
+using ParkingManager.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ builder.Services.Configure<ParkingSettings>(
 builder.Services.AddDbContext<ParkingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgresql"))
 );
+
+builder.Services.AddScoped<IParkingManager, ParkingManager.Services.ParkingManager>();
 
 var app = builder.Build();
 
