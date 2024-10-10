@@ -22,3 +22,11 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=app
       - RABBITMQ_DEFAULT_PASS=app
+
+  s3-ninja:
+    image: scireum/s3-ninja
+    container_name: s3
+    ports:
+      - "9111:9000"
+    volumes:
+      - ./configs/s3:/home/sirius/data
