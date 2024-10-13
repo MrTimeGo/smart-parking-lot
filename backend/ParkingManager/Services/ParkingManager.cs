@@ -1,16 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using ParkingManager.Configurations;
 using ParkingManager.Data;
 using ParkingManager.Dtos;
 using ParkingManager.Entities;
+using ParkingManager.Hubs;
 using ParkingManager.Services.Interfaces;
 
 namespace ParkingManager.Services;
 
 public class ParkingManager(
     ParkingContext context,
-    IOptions<ParkingSettings> parkingSettings
+    IOptions<ParkingSettings> parkingSettings,
+    IHubContext<ParkingLotHub> hub
     ) : IParkingManager
 {
     public async Task<List<ParkingDto>> GetParkingStatus()
@@ -65,6 +68,18 @@ public class ParkingManager(
 
         context.Add(actionLog);
         await context.SaveChangesAsync();
+
+        await hub.Clients.All.SendAsync(
+            "SendActionLogUpdate",
+            new ActionLogDto()
+            {
+                Action = actionLog.Action,
+                At = actionLog.At,
+                Image = actionLog.Image,
+                PlateNumber = actionLog.PlateNumber,
+                Place = actionLog.Place
+            }
+        );
     }
 
     private async Task<int> GetFreePlaceNumber()
@@ -109,6 +124,19 @@ public class ParkingManager(
 
         context.Add(actionLog);
         await context.SaveChangesAsync();
+        
+        await hub.Clients.All.SendAsync(
+            "SendActionLogUpdate",
+            new ActionLogDto()
+            {
+                Action = actionLog.Action,
+                At = actionLog.At,
+                Image = actionLog.Image,
+                PlateNumber = actionLog.PlateNumber,
+                Place = actionLog.Place,
+                Cost = actionLog.Cost
+            }
+        );
     }
 
     private static async Task<string> GetPlateNumberByImageAsync(string plateImage)
