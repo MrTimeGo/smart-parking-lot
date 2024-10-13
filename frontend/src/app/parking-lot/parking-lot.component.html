@@ -1,0 +1,8 @@
+<div class="wrapper">
+  @for (lot of lots; track lot.place) {
+  <div class="lot" 
+    [ngClass]="(lot.place <=5 || (lot.place >=11 && lot.place <=15)) ? 'lot_option_1' : 'lot_option_2'">
+    {{lot.place}}
+  </div>
+}
+</div>
