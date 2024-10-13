@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  db:
+    image: "postgres"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=app
+      - POSTGRES_USER=app
+      - POSTGRES_DB=parking
+
+  rabbitmq:
+    image: "rabbitmq"
+    ports:
+      # RabbitMq instance
+      - "5672:5672"
+      # Web interface
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=app
+      - RABBITMQ_DEFAULT_PASS=app
+
+  s3-ninja:
+    image: scireum/s3-ninja
+    container_name: s3
+    ports:
+      - "9111:9000"
+    volumes:
+      - ./configs/s3:/home/sirius/data

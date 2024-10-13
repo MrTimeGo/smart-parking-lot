@@ -1580,3 +1580,4 @@ coverage*[.json, .xml, .info]
 # End of https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,dotnetcore,dotenv,rider,vs,visualstudio,visualstudiocode,python,pycharm+all,flask,go,goland+all,node,angular,webstorm+all
 
 config.*.yaml
+postgres_data/
