@@ -1,3 +1,5 @@
+
+
 .wrapper {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
@@ -21,4 +23,50 @@
 
 .lot_option_2 {
   border-width: 1px 1px 0 0;
+}
+
+.lot-inner{
+  height: 100%;
+  font-size: 30px;
+  padding-right: 0.5em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.lot-busy{
+  background-color: red;
+}
+.lot-free{
+  background-color: rgb(98, 255, 0);
+}
+
+.logs-wrpapper{
+  border: 1px black solid;
+  border-radius: 20px;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  height: 350px;
+  overflow-y: auto;
+  width: 60%;
+}
+
+.log{
+  border: 1px black solid;
+  margin: 0.5em;
+  padding: 0.5em;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+}
+
+.bottom-wrapper{
+  display: flex;
+  gap: 0.5em;
+  margin-top: 1em;
+  justify-content: space-between;
+}
+
+img{
+  width: 40%;
 }
