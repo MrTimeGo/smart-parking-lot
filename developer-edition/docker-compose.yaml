@@ -30,3 +30,24 @@ services:
       - "9111:9000"
     volumes:
       - ./configs/s3:/home/sirius/data
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+
+  parking-manager:
+    build:
+      context: ../backend/ParkingManager
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - rabbitmq
+      - s3-ninja
