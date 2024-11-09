@@ -1,0 +1,26 @@
+log:
+  level: debug
+  disable_sentry: true
+
+s3:
+  credentials:
+  data:
+    path:
+    bucket:
+
+rabbitmq:
+  url:
+  entered_car_queue_name: "entered_queue"
+  exited_car_queue_name: "exited_queue"
+
+car-stream:
+  entered:
+    num_runners: 1
+    min_delay: 1s
+    max_delay: 5s
+  exited:
+    num_runners: 1
+    min_delay: 1s
+    max_delay: 5s
+  exited_init_delay: 5s
+  dump_file: "dump.json"
