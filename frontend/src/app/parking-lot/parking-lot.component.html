@@ -1,25 +1,46 @@
-<div style="height: 100vh;">
+<div class="container">
   <div class="wrapper">
-    @for (lot of lots; track lot.place) {
-    <div class="lot" 
-      [ngClass]="(lot.place <=5 || (lot.place >=11 && lot.place <=15)) ? 'lot_option_1' : 'lot_option_2'">
-      <div class="lot-inner" [ngClass]="lot.car ? 'lot-busy':'lot-free'">
-        {{lot.place}}
+    @if(lots$ | async; as lots){ @for (lot of lots; track lot.place) {
+    <div
+      class="lot"
+      [ngClass]="
+        lot.place <= 5 || (lot.place >= 11 && lot.place <= 15)
+          ? 'lot_option_1'
+          : 'lot_option_2'
+      "
+    >
+      <div
+        class="lot-inner"
+        [ngClass]="lot.plateNumber ? 'lot-busy' : 'lot-free'"
+      >
+        {{ lot.place }}
       </div>
     </div>
-  }
+    } }
   </div>
   <div class="bottom-wrapper">
-    <img [src]='currentPicture'>
-    <div class="logs-wrpapper">
-    @for (log of logs; track log.place){
-      @if(log.action == ActionType.Enter){
-        <div class="log">The car {{log.plateNumber}} has entered the parking lot #{{log.place}} at {{log.at | date: 'short'}}</div>
-      }
-      @else {
-        <div class="log">The car {{log.plateNumber}} has left the parking lot #{{log.place}} at {{log.at | date: 'short'}}. Was paid {{log.cost}}</div>
-      }
+    @if (logs$|async; as logs) { @if(logs.length){
+    <div class="img" style="background-image: url({{logs[0].image}});"></div>
+    } @else {
+    <div class="img" style="background-image: url({{defaultPicture}});"></div>
     }
-  </div>
+    <div class="logs-wrpapper">
+      @for (log of logs; track log.place){ @if(log.action == ActionType.Enter){
+      <div class="log">
+        The car {{ log.plateNumber }} has entered the parking lot #{{
+          log.place
+        }}
+        at {{ log.at | date : "short" }}
+      </div>
+      } @else {
+      <div class="log">
+        The car {{ log.plateNumber }} has left the parking lot #{{
+          log.place
+        }}
+        at {{ log.at | date : "short" }}. Was paid {{ log.cost }}
+      </div>
+      } }
+    </div>
+    }
   </div>
 </div>

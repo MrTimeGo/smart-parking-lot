@@ -1,4 +1,6 @@
-
+.container{
+  height: 100vh;
+}
 
 .wrapper {
   display: grid;
@@ -49,7 +51,7 @@
   flex-direction: column;
   height: 350px;
   overflow-y: auto;
-  width: 60%;
+  flex: 3;
 }
 
 .log{
@@ -67,6 +69,9 @@
   justify-content: space-between;
 }
 
-img{
-  width: 40%;
+.img{
+  flex: 2;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
 }
