@@ -22,7 +22,7 @@ public class ParkingManager(
     {
         return await context.ActionLogs
             .GroupBy(l => l.Place)
-            .Where(g => g.Select(l => l.Action).FirstOrDefault() == ActionType.Enter)
+            .Where(g => g.Count(l => l.Action == ActionType.Enter) != g.Count(l => l.Action == ActionType.Exit))
             .Select(g => new ParkingDto()
             {
                 Place = g.Key,
@@ -72,7 +72,7 @@ public class ParkingManager(
         await context.SaveChangesAsync();
 
         await hub.Clients.All.SendAsync(
-            "SendActionLogUpdate",
+            "action_update",
             new ActionLogDto()
             {
                 Action = actionLog.Action,
@@ -128,7 +128,7 @@ public class ParkingManager(
         await context.SaveChangesAsync();
         
         await hub.Clients.All.SendAsync(
-            "SendActionLogUpdate",
+            "action_update",
             new ActionLogDto()
             {
                 Action = actionLog.Action,

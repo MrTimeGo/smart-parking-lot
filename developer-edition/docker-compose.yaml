@@ -45,9 +45,21 @@ services:
     ports:
       - "8080:8080"
       - "8081:8081"
-    env_file:
-      - ./.env
+    restart: on-failure
     depends_on:
       - db
-      - rabbitmq
       - s3-ninja
+      - rabbitmq
+
+  car-plate-recognizer:
+    build:
+      context: ../backend/car-plate-recognizer
+      dockerfile: Dockerfile
+    environment:
+      - RABBITMQ_HOSTNAME=rabbitmq
+      - RABBITMQ_USERNAME=app
+      - RABBITMQ_PASSWORD=app
+      - RABBITMQ_QUEUE_NAME=rpc_queue
+    restart: on-failure
+    depends_on:
+      - rabbitmq

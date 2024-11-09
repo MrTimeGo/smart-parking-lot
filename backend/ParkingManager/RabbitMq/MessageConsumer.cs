@@ -26,9 +26,6 @@ public class MessageConsumer(
     {
         _connection = await _connectionFactory.CreateConnectionAsync();
         _channel = await _connection.CreateChannelAsync();
-        
-        // await _channel.ExchangeDeclareAsync(exchange: "",
-        //     type: ExchangeType.Direct);
 
         await ListenToEnteredCarQueue();
         await ListenToExitedCarQueue();
@@ -38,7 +35,6 @@ public class MessageConsumer(
     {
         var queueName = settings.Value.ExitedCarQueueName;
         QueueDeclareOk queueDeclareResult = await _channel!.QueueDeclareAsync(queue: queueName);
-        //await _channel!.QueueBindAsync(queue: queueName, exchange: "", routingKey: string.Empty);
    
         Console.WriteLine(" [*] Waiting for logs.");
    
@@ -62,7 +58,6 @@ public class MessageConsumer(
     {
         var queueName = settings.Value.EnteredCarQueueName;
         QueueDeclareOk queueDeclareResult = await _channel!.QueueDeclareAsync(queue: queueName);
-        //await _channel!.QueueBindAsync(queue: queueName, exchange: "", routingKey: string.Empty);
    
         Console.WriteLine(" [*] Waiting for logs.");
    
