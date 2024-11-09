@@ -11,6 +11,11 @@ export interface LogInfo extends CarInfo {
   action: ActionType;
 }
 
+export interface LotInfo {
+  place: number;
+  plateNumber?: string;
+}
+
 export enum ActionType {
   Enter,
   Exit
