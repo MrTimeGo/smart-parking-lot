@@ -6,6 +6,7 @@ using ParkingManager.Data;
 using ParkingManager.Dtos;
 using ParkingManager.Entities;
 using ParkingManager.Hubs;
+using ParkingManager.RabbitMq;
 using ParkingManager.Services.Interfaces;
 
 namespace ParkingManager.Services;
@@ -13,7 +14,8 @@ namespace ParkingManager.Services;
 public class ParkingManager(
     ParkingContext context,
     IOptions<ParkingSettings> parkingSettings,
-    IHubContext<ParkingLotHub> hub
+    IHubContext<ParkingLotHub> hub,
+    RpcClient rpcClient
     ) : IParkingManager
 {
     public async Task<List<ParkingDto>> GetParkingStatus()
@@ -139,9 +141,13 @@ public class ParkingManager(
         );
     }
 
-    private static async Task<string> GetPlateNumberByImageAsync(string plateImage)
+    private async Task<string> GetPlateNumberByImageAsync(string plateImage)
     {
-        await Task.Delay(500);
-        return "AA1234AA";
+        using var httpClient = new HttpClient();
+        var imageBytes = await httpClient.GetByteArrayAsync(plateImage);
+
+        var plateNumber = await rpcClient.CallAsync(imageBytes);
+        
+        return plateNumber;
     }
 }
