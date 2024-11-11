@@ -27,6 +27,14 @@ func (q *RandomizedQueue[T]) Enqueue(value T) {
 	q.elements = append(q.elements, value)
 }
 
+// BatchEnqueue adds multiple elements to the queue
+func (q *RandomizedQueue[T]) BatchEnqueue(values []T) {
+	q.mutex.Lock()
+	defer q.mutex.Unlock()
+
+	q.elements = append(q.elements, values...)
+}
+
 // Dequeue removes a random element from the queue and returns it
 func (q *RandomizedQueue[T]) Dequeue() (T, error) {
 	q.mutex.Lock()
@@ -45,6 +53,21 @@ func (q *RandomizedQueue[T]) Dequeue() (T, error) {
 	q.elements = q.elements[:len(q.elements)-1]
 
 	return element, nil
+}
+
+// BatchDequeue removes all elements from the queue and returns them
+func (q *RandomizedQueue[T]) BatchDequeue() ([]T, error) {
+	q.mutex.Lock()
+	defer q.mutex.Unlock()
+
+	if len(q.elements) == 0 {
+		return nil, ErrEmptyQueue
+	}
+
+	elements := q.elements
+	q.elements = []T{}
+
+	return elements, nil
 }
 
 // Size returns the number of elements in the queue

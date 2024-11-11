@@ -13,7 +13,7 @@ rabbitmq:
   entered_car_queue_name: "entered_queue"
   exited_car_queue_name: "exited_queue"
 
-car-stream:
+streamer:
   entered:
     num_runners: 1
     min_delay: 1s
@@ -23,4 +23,4 @@ car-stream:
     min_delay: 1s
     max_delay: 5s
   exited_init_delay: 5s
-  dump_file: "dump.json"
+  dump_file: "./dump.json"
