@@ -8,8 +8,8 @@ import (
 )
 
 func Test_Exists(t *testing.T) {
-	client, err := minio.New("localhost:9111", &minio.Options{
-		Creds: credentials.NewStaticV2("AKIAIOSFODNN7EXAMPLE", "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", ""),
+	client, err := minio.New("localhost:9000", &minio.Options{
+		Creds: credentials.NewStaticV2("minioadmin", "minioadmin", ""),
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -23,7 +23,7 @@ func Test_Exists(t *testing.T) {
 
 	assert.False(t, exists)
 
-	exists, err = storage.Exists("mock.txt")
+	exists, err = storage.Exists("test.txt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -36,6 +36,6 @@ func Test_Exists(t *testing.T) {
 	}
 
 	assert.Len(t, cars, 1)
-	assert.Equal(t, "mock.txt", cars[0])
+	assert.Equal(t, "test.txt", cars[0])
 
 }

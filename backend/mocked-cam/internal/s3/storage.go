@@ -32,7 +32,7 @@ func (c *CarStorage) ListCars() ([]string, error) {
 	doneCh := make(chan struct{})
 	defer close(doneCh)
 
-	for object := range c.s3.ListObjects(context.Background(), c.bucket, minio.ListObjectsOptions{Prefix: "asf", Recursive: true}) {
+	for object := range c.s3.ListObjects(context.Background(), c.bucket, minio.ListObjectsOptions{Recursive: true}) {
 		if object.Err != nil {
 			return nil, object.Err
 		}

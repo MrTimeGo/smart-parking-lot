@@ -4,7 +4,7 @@ services:
   db:
     image: "postgres"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     environment:
@@ -22,14 +22,6 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=app
       - RABBITMQ_DEFAULT_PASS=app
-
-  s3-ninja:
-    image: scireum/s3-ninja
-    container_name: s3
-    ports:
-      - "9111:9000"
-    volumes:
-      - ./configs/s3:/home/sirius/data
 
   frontend:
     build:
@@ -50,4 +42,46 @@ services:
     depends_on:
       - db
       - rabbitmq
-      - s3-ninja
+      - minio
+
+  minio:
+    image: quay.io/minio/minio:RELEASE.2024-05-28T17-19-04Z
+    command: server --console-address ":9001" /data
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    container_name: minio
+    hostname: minio
+    volumes:
+      - minio_data:/data    # Data directory where MinIO stores objects
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    healthcheck:
+      test: [ "CMD", "mc", "ready", "local" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  bucketer:
+    depends_on:
+      - minio
+    image: minio/mc
+    volumes:
+      - ./data/images:/data
+    entrypoint: >
+      /bin/sh -c "
+            /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+            if /usr/bin/mc ls myminio/cars > /dev/null 2>&1; then
+                echo 'Bucket already exists. Exiting.';
+                exit 0;
+            else
+                /usr/bin/mc mb myminio/cars;
+                /usr/bin/mc policy set public myminio/cars;
+                /usr/bin/mc cp --recursive /data/* myminio/cars;
+            fi;
+            exit 0;
+      "
+volumes:
+  minio_data:
+  postgres_data:
