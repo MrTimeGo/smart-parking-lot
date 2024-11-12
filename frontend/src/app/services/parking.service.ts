@@ -36,9 +36,9 @@ export class ParkingService {
       .withUrl(this.baseUrl + '/parkingLotHub') // SignalR hub URL
       .build();
 
-    this.connect();
-
     this.registerActionLogHandler();
+      
+    this.connect();
   }
 
   connect() {
@@ -54,6 +54,7 @@ export class ParkingService {
 
   registerActionLogHandler() {
     this.hubConnection.on('action_update', (log: LogInfo) => {
+      console.log(`Received: ${log}`);
       this._logs$.next([log, ...this._logs$.value]);
       this.updateLot(
         log.place,
