@@ -2,9 +2,11 @@ package initializer
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/MrTimeGo/smart-parking-lot/backend/mocked-cam/pkg/randq"
 	"github.com/pkg/errors"
 	"os"
+	"strings"
 )
 
 type DumpInfo struct {
@@ -13,34 +15,44 @@ type DumpInfo struct {
 
 func InitializeQueues(dumpFile string, carPathes []string) (enterq, exitq *randq.RandomizedQueue[string], err error) {
 	raw, err := os.ReadFile(dumpFile)
+	fileEmpty := false
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "failed to read dump file")
+		if strings.Contains(err.Error(), "no such file or directory") {
+			fileEmpty = true
+			err = nil
+		} else {
+			return nil, nil, errors.Wrap(err, "failed to read dump file")
+		}
 	}
 
 	var dump DumpInfo
-	if err = json.Unmarshal(raw, &dump); err != nil {
-		return nil, nil, errors.Wrap(err, "failed to unmarshal dump file")
+	if !fileEmpty {
+		if err = json.Unmarshal(raw, &dump); err != nil {
+			return nil, nil, errors.Wrap(err, "failed to unmarshal dump file")
+		}
 	}
 
 	enterq = randq.New[string]()
 	exitq = randq.New[string]()
 
-	for _, path := range carPathes {
+	for _, all := range carPathes {
 		match := false
 
-		for _, entered := range dump.CarsToExit {
-			if entered == path {
+		for _, toExit := range dump.CarsToExit {
+			if toExit == all {
 				match = true
 				break
 			}
 		}
 
 		if match {
-			enterq.Enqueue(path)
+			exitq.Enqueue(all)
 		} else {
-			exitq.Enqueue(path)
+			enterq.Enqueue(all)
 		}
 	}
+
+	fmt.Println(enterq.Size(), exitq.Size())
 
 	return
 }

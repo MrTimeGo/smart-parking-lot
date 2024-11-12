@@ -3,7 +3,10 @@ package s3
 import (
 	"context"
 	"fmt"
+	"github.com/MrTimeGo/smart-parking-lot/backend/mocked-cam/internal/s3/config"
 	"github.com/minio/minio-go/v7"
+	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/pkg/errors"
 )
 
 type CarStorage struct {
@@ -11,8 +14,15 @@ type CarStorage struct {
 	bucket string
 }
 
-func New(client *minio.Client, bucket string) *CarStorage {
-	return &CarStorage{s3: client, bucket: bucket}
+func New(cfg config.S3Config) *CarStorage {
+	client, err := minio.New(cfg.Credentials.Endpoint, &minio.Options{
+		Creds: credentials.NewStaticV2(cfg.Credentials.SecretKey, cfg.Credentials.AccessKey, ""),
+	})
+	if err != nil {
+		panic(errors.Wrap(err, "failed to create s3 client"))
+	}
+
+	return &CarStorage{s3: client, bucket: cfg.Bucket}
 }
 
 func (c *CarStorage) Exists(car string) (bool, error) {

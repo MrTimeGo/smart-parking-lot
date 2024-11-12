@@ -5,9 +5,13 @@ go 1.22.6
 require (
 	github.com/minio/minio-go/v7 v7.0.80
 	github.com/pkg/errors v0.9.1
+	github.com/rabbitmq/amqp091-go v1.10.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
+	gitlab.com/distributed_lab/figure v2.1.2+incompatible
+	gitlab.com/distributed_lab/figure/v3 v3.1.4
 	gitlab.com/distributed_lab/kit v1.11.3
+	gitlab.com/distributed_lab/logan v3.8.1+incompatible
 )
 
 require (
@@ -48,8 +52,6 @@ require (
 	github.com/subosito/gotenv v1.6.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.11 // indirect
 	github.com/tklauser/numcpus v0.6.0 // indirect
-	gitlab.com/distributed_lab/figure/v3 v3.1.4 // indirect
-	gitlab.com/distributed_lab/logan v3.8.1+incompatible // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.9.0 // indirect
 	golang.org/x/crypto v0.28.0 // indirect
