@@ -52,10 +52,11 @@ services:
       - RABBITMQ_USERNAME=app
       - RABBITMQ_PASSWORD=app
       - RABBITMQ_QUEUE_NAME=rpc_queue
-    restart: on-failure
+    restart: unless-stopped
     depends_on:
       - rabbitmq
       - minio
+    entrypoint: "python -u main.py"
 
   mocked-cam:
     build:
@@ -101,16 +102,28 @@ services:
       - ./data/images:/data
     entrypoint: >
       /bin/sh -c "
-            /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
-            if /usr/bin/mc ls myminio/cars > /dev/null 2>&1; then
-                echo 'Bucket already exists. Exiting.';
-                exit 0;
-            else
-                /usr/bin/mc mb myminio/cars;
-                /usr/bin/mc policy set public myminio/cars;
-                /usr/bin/mc cp --recursive /data/* myminio/cars;
-            fi;
-            exit 0;
+          # Retry logic for setting alias
+          retries=5
+          until /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin; do
+              retries=$((retries - 1))
+              if [ $retries -le 0 ]; then
+                  echo 'Failed to set MinIO alias after multiple attempts. Exiting.';
+                  exit 1
+              fi
+              echo 'Failed to set MinIO alias. Retrying in 5 seconds...';
+              sleep 1;
+          done;
+
+          # Check if the bucket exists and create it if not
+          if /usr/bin/mc ls myminio/cars > /dev/null 2>&1; then
+              echo 'Bucket already exists. Exiting.';
+              exit 0;
+          else
+              /usr/bin/mc mb myminio/cars;
+              /usr/bin/mc anonymous set download myminio/cars;
+              /usr/bin/mc cp --recursive /data/* myminio/cars;
+          fi;
+          exit 0;
       "
 volumes:
   minio_data:

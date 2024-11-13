@@ -1,1 +1,0 @@
-load your images in this directory
