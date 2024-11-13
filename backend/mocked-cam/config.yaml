@@ -1,0 +1,26 @@
+log:
+  level: debug
+  disable_sentry: true
+
+s3:
+  credentials:
+    endpoint: localhost:9000
+    access_key: minioadmin
+    secret_key: minioadmin
+  bucket: cars
+
+rabbitmq:
+  url: amqp://app:app@localhost:5672/
+  entered_car_queue_name: "entered_queue"
+  exited_car_queue_name: "exited_queue"
+
+streamer:
+  entered:
+    min_delay: 1s
+    max_delay: 5s
+    init_delay: 0s
+  exited:
+    min_delay: 5s
+    max_delay: 6s
+    init_delay: 10s
+  dump_file: "./dump.json"
