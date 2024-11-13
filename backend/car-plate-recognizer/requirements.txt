@@ -1,2 +1,6 @@
 pika
 python-dotenv
+opencv-python
+numpy
+imutils
+easyocr
