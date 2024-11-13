@@ -57,6 +57,23 @@ services:
       - rabbitmq
       - minio
 
+  mocked-cam:
+    build:
+      context: ../backend/mocked-cam
+      dockerfile: Dockerfile
+    hostname: mocked-cam
+    container_name: mocked-cam
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+      - minio
+    environment:
+      KV_VIPER_FILE: '/config.yaml'
+    volumes:
+      - ./configs/mocked-cam.yaml:/config.yaml
+      - ./data/mocked-cam-volume.json:/dump.json
+    entrypoint: sh -c "mocked-cam run"
+
   minio:
     image: quay.io/minio/minio:RELEASE.2024-05-28T17-19-04Z
     command: server --console-address ":9001" /data

@@ -24,6 +24,9 @@ func InitializeQueues(dumpFile string, carPathes []string) (enterq, exitq *randq
 			return nil, nil, errors.Wrap(err, "failed to read dump file")
 		}
 	}
+	if len(raw) == 0 {
+		fileEmpty = true
+	}
 
 	var dump DumpInfo
 	if !fileEmpty {

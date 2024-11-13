@@ -1,6 +1,6 @@
 module github.com/MrTimeGo/smart-parking-lot/backend/mocked-cam
 
-go 1.22.6
+go 1.23
 
 require (
 	github.com/minio/minio-go/v7 v7.0.80
