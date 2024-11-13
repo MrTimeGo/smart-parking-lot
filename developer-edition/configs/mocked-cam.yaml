@@ -16,11 +16,11 @@ rabbitmq:
 
 streamer:
   entered:
-    min_delay: 1s
-    max_delay: 5s
+    min_delay: 20s
+    max_delay: 50s
     init_delay: 0s
   exited:
-    min_delay: 1s
-    max_delay: 5s
-    init_delay: 10s
+    min_delay: 20s
+    max_delay: 50s
+    init_delay: 100s
   dump_file: "./dump.json"

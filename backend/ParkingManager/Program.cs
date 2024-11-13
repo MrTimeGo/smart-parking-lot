@@ -19,6 +19,10 @@ builder.Services.Configure<RabbitMqSettings>(
     builder.Configuration.GetSection(RabbitMqSettings.SectionName)
 );
 
+builder.Services.Configure<MinioSettings>(
+    builder.Configuration.GetSection(MinioSettings.SectionName)
+);
+
 builder.Services.AddDbContext<ParkingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Postgresql"))
 );

@@ -14,6 +14,7 @@ namespace ParkingManager.Services;
 public class ParkingManager(
     ParkingContext context,
     IOptions<ParkingSettings> parkingSettings,
+    IOptions<MinioSettings> minioSettings,
     IHubContext<ParkingLotHub> hub,
     RpcClient rpcClient
     ) : IParkingManager
@@ -63,7 +64,7 @@ public class ParkingManager(
         {
             Action = ActionType.Enter,
             At = DateTime.UtcNow,
-            Image = plateImage,
+            Image = minioSettings.Value.OuterLink + "/cars/" + plateImage,
             PlateNumber = plateNumber,
             Place = freePlace
         };
@@ -118,10 +119,10 @@ public class ParkingManager(
         {
             Action = ActionType.Exit,
             At = DateTime.UtcNow,
-            Image = plateImage,
+            Image = minioSettings.Value.OuterLink + "/cars/" + plateImage,
             PlateNumber = plateNumber,
             Place = enteringActionLog.Place,
-            Cost = (DateTime.UtcNow - enteringActionLog.At).Minutes * parkingSettings.Value.CostPerMinute
+            Cost = (decimal)(DateTime.UtcNow - enteringActionLog.At).TotalSeconds * parkingSettings.Value.CostPerMinute / 60m
         };
 
         context.Add(actionLog);
@@ -144,7 +145,8 @@ public class ParkingManager(
     private async Task<string> GetPlateNumberByImageAsync(string plateImage)
     {
         using var httpClient = new HttpClient();
-        var imageBytes = await httpClient.GetByteArrayAsync(plateImage);
+        Console.WriteLine(minioSettings.Value.InnerLink + "/cars/" + plateImage);
+        var imageBytes = await httpClient.GetByteArrayAsync(minioSettings.Value.InnerLink + "/cars/" + plateImage);
 
         var plateNumber = await rpcClient.CallAsync(imageBytes);
         
