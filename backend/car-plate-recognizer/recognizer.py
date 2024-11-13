@@ -1,14 +1,17 @@
 import cv2
-from matplotlib import pyplot as plt
 import numpy as np
 import imutils
 import easyocr
 
 def recognize_image(imageBytes):
 
-    # img = cv2.imread('')  -   decide: bytes or link
-    img = imageBytes
-    
+    nparr = np.frombuffer(imageBytes, np.uint8)
+
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    if img is None:
+        print("Cannot decode the image")
+
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     bfilter = cv2.bilateralFilter(img, 11, 17, 17) #Noise reduction
