@@ -34,7 +34,13 @@ public class MessageConsumer(
     private async Task ListenToExitedCarQueue()
     {
         var queueName = settings.Value.ExitedCarQueueName;
-        QueueDeclareOk queueDeclareResult = await _channel!.QueueDeclareAsync(queue: queueName);
+        await _channel!.QueueDeclareAsync(
+            queue: queueName,
+            durable: false,
+            autoDelete: false,
+            exclusive: false,
+            noWait: false
+        );
    
         Console.WriteLine(" [*] Waiting for logs.");
    
@@ -57,7 +63,13 @@ public class MessageConsumer(
     private async Task ListenToEnteredCarQueue()
     {
         var queueName = settings.Value.EnteredCarQueueName;
-        QueueDeclareOk queueDeclareResult = await _channel!.QueueDeclareAsync(queue: queueName);
+        await _channel!.QueueDeclareAsync(
+            queue: queueName,
+            durable: false,
+            autoDelete: false,
+            exclusive: false,
+            noWait: false
+        );
    
         Console.WriteLine(" [*] Waiting for logs.");
    
