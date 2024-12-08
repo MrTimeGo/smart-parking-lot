@@ -1,5 +1,5 @@
 .container{
-  height: 100vh;
+  margin-inline: 2em;
 }
 
 .wrapper {
@@ -9,44 +9,50 @@
 }
 
 .lot {
-  border: 1px solid black;
+  border: 1px solid rgb(248, 132, 0);
   height: 70px;
 
   &:nth-child(5n) {
-    border-bottom-width: 1px;
+    border-bottom-width: 5px;
   }
 }
 
 .lot_option_1 {
-  border-width: 1px 0 0 1px;
+  border-width: 5px 0 5px 5px;
   margin-right: 200px;
   text-align: end;
+  margin-bottom: 0.25em;
 }
 
 .lot_option_2 {
-  border-width: 1px 1px 0 0;
+  border-width: 5px 5px 5px 0;
+  margin-right: 0.25em;
+}
+
+.lot-number{
+  font-size: 1.75em;
 }
 
 .lot-inner{
   height: 100%;
-  font-size: 30px;
-  padding-right: 0.5em;
+  font-size: 1.25em;
+  padding-inline: 0.5em;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
 }
 
 .lot-busy{
-  background-color: red;
+  background-color: rgb(233, 189, 189);
 }
 .lot-free{
-  background-color: rgb(98, 255, 0);
+  background-color: rgb(191, 219, 173);
 }
 
 .logs-wrpapper{
   border: 1px black solid;
   border-radius: 20px;
-  padding: 0.5em;
+  background-color: white;
   display: flex;
   flex-direction: column;
   height: 350px;
@@ -74,4 +80,46 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
+}
+
+.no-img{
+  flex: 2;
+  border-radius: 20px;
+  background-color: rgb(197, 197, 197);
+  display: flex;
+  font-size: 1.5em;
+  align-items: center;
+  justify-content: center;
+}
+
+.header{
+  background-color: rgb(231, 231, 231);
+  padding: 1em;
+  font-size: 1.5em;
+  margin-bottom: 1em;
+  color: rgb(65, 65, 65);
+  font-weight: bold;
+  font-family: Palatino, Palatino Linotype, Georgia, Times, "Times New Roman", serif;
+}
+
+.parking-header{
+  background-color: rgb(219, 240, 245);
+  color: rgb(44, 44, 44);
+  padding: 0.5em;
+  margin: 0.75em;
+  letter-spacing: .4rem;
+  border-radius: 50px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.75em;
+  text-transform: uppercase;
+}
+
+.logs-header{
+  background-color: rgb(219, 240, 245);
+  color: rgb(44, 44, 44);
+  padding: 1em;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.35em;
 }

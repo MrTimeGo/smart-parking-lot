@@ -1,4 +1,6 @@
 <div class="container">
+<div>
+  <div class="parking-header">Parking lots</div>
   <div class="wrapper">
     @if(lots$ | async; as lots){ @for (lot of lots; track lot.place) {
     <div
@@ -13,18 +15,23 @@
         class="lot-inner"
         [ngClass]="lot.plateNumber ? 'lot-busy' : 'lot-free'"
       >
-        {{ lot.place }}
+        <div>{{ lot.plateNumber }}</div>
+        <div class="lot-number">{{ lot.place }}</div>
       </div>
     </div>
     } }
   </div>
+</div>
   <div class="bottom-wrapper">
     @if (logs$|async; as logs) { @if(logs.length){
     <div class="img" style="background-image: url({{logs[0].image}});"></div>
     } @else {
-    <div class="img" style="background-image: url({{defaultPicture}});"></div>
+    <div class="no-img">
+      <div>No car yet</div>
+    </div>
     }
     <div class="logs-wrpapper">
+      <div class="logs-header">Enter/ Exit Logs</div>
       @for (log of logs; track log.place){ @if(log.action == ActionType.Enter){
       <div class="log">
         The car {{ log.plateNumber }} has entered the parking lot #{{
